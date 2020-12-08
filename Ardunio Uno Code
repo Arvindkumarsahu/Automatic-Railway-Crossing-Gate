@@ -1,0 +1,48 @@
+#include <Servo.h>
+Servo servo1;
+int i;
+int red_signal = 5;
+int green_signal = 6;
+int ir_sensor1 = 8; 
+int ir_sensor2 = 9;
+int x, y;
+
+void setup() {
+  // put your setup code here, to run once:
+  pinMode(red_signal,OUTPUT);
+  pinMode(green_signal, OUTPUT);
+pinMode(ir_sensor1, INPUT);
+pinMode(ir_sensor2, INPUT);
+servo1.attach(10);
+servo1.write(180);
+Serial.begin(9600);
+}
+
+void loop() {
+  // put your main code here, to run repeatedly:
+x = !digitalRead(ir_sensor1);
+y = !digitalRead(ir_sensor2);
+//Serial.println(x);
+//Serial.println(y);
+//Serial.println(" ");
+servo1.write(0);
+delay(800);
+
+if ( !digitalRead(ir_sensor1) == 1){
+  Serial.println("Train is approaching.Alert!");
+  
+   for (i=0;i<180;i++){
+      servo1.write(i);
+    }
+  delay(6000);
+  if ( !digitalRead(ir_sensor2)== 1 and !digitalRead(ir_sensor1)==0){
+    Serial.println("Train passed the point");
+     delay(600);
+    for (i=180;i>0;i--){
+      servo1.write(i);
+    }
+    delay(600);
+}
+}
+
+}
